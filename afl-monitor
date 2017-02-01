@@ -32,10 +32,14 @@ COLORS = {"HEADER" : '\033[95m',
     "ENDC" : '\033[0m'
 }
 
+def removeColor(s):
+    ansi_escape = re.compile(r'\x1b[^m]*m')
+    s = ansi_escape.sub('', s)
+    return s
+
 def pprint(s):
     if OPTIONS["nocolor"]:
-        ansi_escape = re.compile(r'\x1b[^m]*m')
-        s = ansi_escape.sub('', s)
+        s = removeColor(s)
     print s
 
 def secondsToTimestamp(seconds):
@@ -305,7 +309,9 @@ if OPTIONS["commandline"]:
     pprint(output)
 
 if OPTIONS["execute"] and deltaUniqueCrashes > 0:
-    pass
+    pprint("%s%s[%s%s Got new crash! Sending to CMD... %s]%s\n" % (COLORS["BOLD"], COLORS["OKBLUE"], COLORS["ENDC"], COLORS["BOLD"], COLORS["OKBLUE"], COLORS["ENDC"]))
+    plain_output = removeColor(output)
+    system("echo '%s' | %s" % (plain_output,OPTIONS["execute"]))
 
 pickle.dump(DATA,open(".afl-monitor.state","w"))
 
@@ -318,4 +324,4 @@ pickle.dump(DATA,open(".afl-monitor.state","w"))
 # [v] Per-fuzzer output
 # [v] Difference Indicator
 # [v] High "hours ago" count without incidents
-# [] Execute Option
+# [v] Execute Option
