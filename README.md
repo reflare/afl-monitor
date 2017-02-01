@@ -38,8 +38,20 @@ Re-runs this script with all provided arguments every 'second_count' seconds.
 
 Place afl-monitor anywhere in your file system and execute it. Requires Python 2.7.
 
-#### Screenshots
+### Screenshots
+
+#### Console Summary
 
 ![General Overview](https://github.com/reflare/afl-monitor/raw/master/documentation/screenshots/summary.png)
 
+#### Console Per-Fuzzer Output
+
 ![Per Fuzzer](https://github.com/reflare/afl-monitor/raw/master/documentation/screenshots/perfuzzer.png)
+
+#### HTML Summary
+
+![HTML Summary](https://raw.githubusercontent.com/reflare/afl-monitor/master/documentation/screenshots/html-summary.png)
+
+#### HTML Per-Fuzzer Output
+
+![HTML Per Fuzzer](https://github.com/reflare/afl-monitor/raw/master/documentation/screenshots/html-detail.png)
