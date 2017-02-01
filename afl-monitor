@@ -273,32 +273,39 @@ deltaMostStable = DATA["mostStable"] - PREVIOUS["mostStable"]
 deltaLeastStable = DATA["leastStable"] - PREVIOUS["leastStable"]
 deltaUniqueCrashes = DATA["crashes"] - PREVIOUS["crashes"]
 
+output = "\n"
+output += "%s%s[%s%s SUMMARY %s]%s\n" % (COLORS["BOLD"], COLORS["OKBLUE"], COLORS["ENDC"], COLORS["BOLD"], COLORS["OKBLUE"], COLORS["ENDC"])
+output += "Fuzzers (Alive/Total):\t%s%d%s%s / %s%d%s%s\n" % (COLORS["BOLD"], DATA["aliveFuzzers"], makeDeltaString(deltaAliveFuzzers), COLORS["ENDC"],COLORS["BOLD"], DATA["totalFuzzers"], makeDeltaString(deltaTotalFuzzers), COLORS["ENDC"])
+output += "Total Executions:\t%s%s%s%s\n" % (COLORS["BOLD"],'{:,}'.format(DATA["totalExecs"]),COLORS["ENDC"], makeDeltaString(deltaTotalExecs))
+try:
+    output += "Current Speed:\t\t%s%s%s%s execs/second\n" % (COLORS["BOLD"],'{:,.2f}'.format(DATA["totalSpeed"]),COLORS["ENDC"], makeDeltaString(deltaTotalSpeed))
+    output += "Average Speed per Core:\t%s%s%s%s execs/second\n" % (COLORS["BOLD"],'{:,.2f}'.format(DATA["totalSpeed"] / DATA["aliveFuzzers"]),COLORS["ENDC"], makeDeltaString(deltaTotalSpeed / DATA["aliveFuzzers"]))
+except:
+    output += "Current Speed:\t\t%s%s%s execs/second\n" % (COLORS["BOLD"],"0.00",COLORS["ENDC"])
+output += "Paths Found (Favs/All):\t%s%s%s%s / %s%s%s%s\n" % (COLORS["BOLD"],'{:,}'.format(DATA["pathsFavorite"]),COLORS["ENDC"], makeDeltaString(deltaPathsFavorite),COLORS["BOLD"],'{:,}'.format(DATA["pathsTotal"]),COLORS["ENDC"], makeDeltaString(deltaPathsTotal))
+output += "Pending (Favs/All):\t%s%s%s%s / %s%s%s%s\n" % (COLORS["BOLD"],'{:,}'.format(DATA["pendingFavorite"]),COLORS["ENDC"], makeDeltaString(deltaPendingFavorite),COLORS["BOLD"],'{:,}'.format(DATA["pendingGeneral"]),COLORS["ENDC"], makeDeltaString(deltaPendingGeneral))
+try:
+    output += "Average Stability:\t%s%.2f%%%s%s\n" % (COLORS["BOLD"], DATA["totalStability"] / DATA["totalFuzzers"], COLORS["ENDC"], makeDeltaString(deltaAverageStability))
+except:
+    pass
+output += "Most Stable Fuzzer:\t%s%.2f%%%s%s\n" % (COLORS["BOLD"], DATA["mostStable"], COLORS["ENDC"], makeDeltaString(deltaMostStable))
+output += "Least Stable Fuzzer:\t%s%.2f%%%s%s\n" % (COLORS["BOLD"], DATA["leastStable"], COLORS["ENDC"], makeDeltaString(deltaLeastStable))
+try:
+    output +="Average Cycle Complete:\t%s%s%s\n" % (COLORS["BOLD"], int(float(DATA["totalCycles"]) / DATA["totalFuzzers"]),COLORS["ENDC"])
+except:
+    pass
+output += "Maximum Cycle Complete:\t%s%s%s%s\n" % (COLORS["BOLD"], DATA["maxCycle"],COLORS["ENDC"], makeDeltaString(deltaMaxCycle))
+output += "Last Path:\t\t%s%s%s ago\n" % (COLORS["BOLD"], secondsToTimestamp(now - DATA["lastPath"]), COLORS["ENDC"])
+output += "Last Hang:\t\t%s%s%s ago\n" % (COLORS["BOLD"], secondsToTimestamp(now - DATA["lastHang"]), COLORS["ENDC"])
+output += "Last Crash:\t\t%s%s%s ago\n" % (COLORS["BOLD"], secondsToTimestamp(now - DATA["lastCrash"]), COLORS["ENDC"])
+output += "Unique Crashes:\t\t%s%s%d%s%s\n" % (COLORS["BOLD"],COLORS["HEADER"],DATA["crashes"],COLORS["ENDC"], makeDeltaString(deltaUniqueCrashes))
+
+
 if OPTIONS["commandline"]:
-    pprint("")
-    pprint("%s%s[%s%s SUMMARY %s]%s" % (COLORS["BOLD"], COLORS["OKBLUE"], COLORS["ENDC"], COLORS["BOLD"], COLORS["OKBLUE"], COLORS["ENDC"]))
-    pprint("Fuzzers (Alive/Total):\t%s%d%s%s / %s%d%s%s" % (COLORS["BOLD"], DATA["aliveFuzzers"], makeDeltaString(deltaAliveFuzzers), COLORS["ENDC"],COLORS["BOLD"], DATA["totalFuzzers"], makeDeltaString(deltaTotalFuzzers), COLORS["ENDC"]))
-    pprint("Total Executions:\t%s%s%s%s" % (COLORS["BOLD"],'{:,}'.format(DATA["totalExecs"]),COLORS["ENDC"], makeDeltaString(deltaTotalExecs)))
-    try:
-        pprint("Current Speed:\t\t%s%s%s%s execs/second" % (COLORS["BOLD"],'{:,.2f}'.format(DATA["totalSpeed"]),COLORS["ENDC"], makeDeltaString(deltaTotalSpeed)))
-    except:
-        pprint("Current Speed:\t\t%s%s%s execs/second" % (COLORS["BOLD"],"0.00",COLORS["ENDC"]))
-    pprint("Paths Found (Favs/All):\t%s%s%s%s / %s%s%s%s" % (COLORS["BOLD"],'{:,}'.format(DATA["pathsFavorite"]),COLORS["ENDC"], makeDeltaString(deltaPathsFavorite),COLORS["BOLD"],'{:,}'.format(DATA["pathsTotal"]),COLORS["ENDC"], makeDeltaString(deltaPathsTotal)))
-    pprint("Pending (Favs/All):\t%s%s%s%s / %s%s%s%s" % (COLORS["BOLD"],'{:,}'.format(DATA["pendingFavorite"]),COLORS["ENDC"], makeDeltaString(deltaPendingFavorite),COLORS["BOLD"],'{:,}'.format(DATA["pendingGeneral"]),COLORS["ENDC"], makeDeltaString(deltaPendingGeneral)))
-    try:
-        pprint("Average Stability:\t%s%.2f%%%s%s" % (COLORS["BOLD"], DATA["totalStability"] / DATA["totalFuzzers"], COLORS["ENDC"], makeDeltaString(deltaAverageStability)))
-    except:
-        pass
-    pprint("Most Stable Fuzzer:\t%s%.2f%%%s%s" % (COLORS["BOLD"], DATA["mostStable"], COLORS["ENDC"], makeDeltaString(deltaMostStable)))
-    pprint("Least Stable Fuzzer:\t%s%.2f%%%s%s" % (COLORS["BOLD"], DATA["leastStable"], COLORS["ENDC"], makeDeltaString(deltaLeastStable)))
-    try:
-        pprint("Average Cycle Complete:\t\t%s%s%s" % (COLORS["BOLD"], int(float(DATA["totalCycles"]) / DATA["totalFuzzers"]),COLORS["ENDC"]))
-    except:
-        pass
-    pprint("Maximum Cycle Complete:\t\t%s%s%s%s" % (COLORS["BOLD"], DATA["maxCycle"],COLORS["ENDC"], makeDeltaString(deltaMaxCycle)))
-    pprint("Last Path:\t\t%s%s%s ago" % (COLORS["BOLD"], secondsToTimestamp(now - DATA["lastPath"]), COLORS["ENDC"]))
-    pprint("Last Hang:\t\t%s%s%s ago" % (COLORS["BOLD"], secondsToTimestamp(now - DATA["lastHang"]), COLORS["ENDC"]))
-    pprint("Last Crash:\t\t%s%s%s ago" % (COLORS["BOLD"], secondsToTimestamp(now - DATA["lastCrash"]), COLORS["ENDC"]))
-    pprint("Unique Crashes:\t\t%s%s%d%s%s" % (COLORS["BOLD"],COLORS["HEADER"],DATA["crashes"],COLORS["ENDC"], makeDeltaString(deltaUniqueCrashes)))
+    pprint(output)
+
+if OPTIONS["execute"] and deltaUniqueCrashes > 0:
+    pass
 
 pickle.dump(DATA,open(".afl-monitor.state","w"))
 
