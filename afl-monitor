@@ -409,7 +409,7 @@ if OPTIONS["html"]:
         html_out +="<tr><td>Average Cycle Complete</td><td><b>%s</b></td></tr>" % (int(float(DATA["totalCycles"]) / DATA["totalFuzzers"]))
     except:
         pass
-    html_out += "<tr><td>Maximum Cycle Complete</td><td><b>%s</b>%s</td></tr>" % ( DATA["maxCycle"], makeDeltaString(deltaMaxCycle))
+    html_out += "<tr><td>Maximum Cycle Complete</td><td><b>%s</b>%s</td></tr>" % ( DATA["maxCycle"], makeDeltaString(deltaMaxCycle, "html"))
     html_out += "<tr><td>Last Path:</td><td><b>%s</b> ago</td></tr>" % (secondsToTimestamp(now - DATA["lastPath"]))
     html_out += "<tr><td>Last Hang:</td><td><b>%s</b> ago</td></tr>" % (secondsToTimestamp(now - DATA["lastHang"]))
     html_out += "<tr><td>Last Crash:</td><td><b>%s</b> ago</td></tr>" % (secondsToTimestamp(now - DATA["lastCrash"]))
