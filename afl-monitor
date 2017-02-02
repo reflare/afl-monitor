@@ -60,10 +60,10 @@ def printUsage():
     [-e | --execute command] [-r | --recursive second_count]  findings_directory
 
 The findings_directory parameter should point to an existing findings directory
-contianing one or several state directories for any active or stopped instance
+containing one or several state directories for any active or stopped instance
 of afl-fuzz.
 
--n | --nocolor\t\tSupresses color output.
+-n | --nocolor\t\tSuppresses color output.
 
 -c | --commandLine\tOutput to the command line (can be used with -h)
 
